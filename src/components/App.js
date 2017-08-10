@@ -5,11 +5,11 @@ const { Header, Footer, Content } = Layout
 
 const App = () => (
   <Layout>
-    <Header>Header</Header>
+    <Header />
     <Content style={{ textAlign: 'center' }}>
       <Gallery />
     </Content>
-    <Footer>Footer</Footer>
+    <Footer />
   </Layout>
 )
 

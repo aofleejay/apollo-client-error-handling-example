@@ -1,26 +1,32 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
-import { Spin } from 'antd'
+import { Spin, Button } from 'antd'
 import { fetchAllImages as query } from '../queries/image'
 import { createImage as mutation } from '../mutations/image'
 
-const Gallery = props => {
-  const onClick = () => {
-    props.mutate().then((response) => {
-      props.data.refetch()
+class Gallery extends Component {
+  createImageAndReFetch = () => {
+    this.props.mutate()
+    .then(response => {
+      this.props.data.refetch()
+    })
+    .catch(error => {
+      console.error(error)
     })
   }
 
-  const { loading, error, allImages } = props.data
-  if (loading) return <Spin size="large" />
-  else if (error) return <div id="error">Error...</div>
+  render() {
+    const { loading, error, allImages } = this.props.data
+    if (loading) return <Spin size="large" />
+    else if (error) return <div>Error...</div>
 
-  return (
-    <div>
-      { allImages.map(image => <img key={image.id} src={image.url} />) }
-       <button onClick={onClick}>load</button> 
-    </div>
-  )
+    return (
+      <div>
+        { allImages.map(image => <img key={image.id} src={image.url} />) }
+        <Button onClick={this.createImageAndReFetch}>Load more...</Button> 
+      </div>
+    )
+  }
 }
 
 export default compose(
