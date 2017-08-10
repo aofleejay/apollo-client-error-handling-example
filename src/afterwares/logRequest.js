@@ -1,7 +1,7 @@
 const logRequest = {
   applyAfterware({ response }, next) {
-    if (response.status === 400) {
-      console.log('request failed.')
+    if (response.status === 200) {
+      console.log('log from afterware.')
     }
     next()
   }
