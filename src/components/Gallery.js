@@ -7,9 +7,15 @@ import { fetchAllImages as query } from '../queries/image'
 
 class Gallery extends Component {
   render() {
+    const { loading, error, allImages } = this.props.data
+    if (loading) return <Loading />
+    else if (error) return <Error />
+
     return (
       <div>
-        Gallery
+        {
+          allImages.map(image => <img key={image.id} src={image.url} />)
+        }
       </div>
     )
   }
