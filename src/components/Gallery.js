@@ -1,27 +1,24 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import { Button } from 'antd'
+import mutationState from 'react-apollo-mutation-state'
 import Loading from './common/Loading'
 import Error from './common/Error'
 import { fetchAllImages as query } from '../queries/image'
 import { createImage as mutation } from '../mutations/image'
 
 class Gallery extends Component {
-  state = {
-    loading: false,
-  }
-
   createImageAndReFetch = () => {
-    this.setState({ loading: true })
+    this.props.mutation.set({ loading: true })
     this.props.createImage({
       refetchQueries: [{ query }]
     })
     .then(response => {
-      this.setState({ loading: false })
+      this.props.mutation.set({ loading: false, error: null })
     })
     .catch(error => {
       console.error(error)
-      this.setState({ loading: false })
+      this.props.mutation.set({ loading: false, error })
     })
   }
 
@@ -38,7 +35,7 @@ class Gallery extends Component {
         <div>
           <Button
             type="primary"
-            loading={this.state.loading}
+            loading={this.props.mutation.loading}
             onClick={this.createImageAndReFetch}
           >
             Load more...
@@ -49,7 +46,9 @@ class Gallery extends Component {
   }
 }
 
-export default compose(
+const withMutationState = mutationState()
+
+export default withMutationState(compose(
   graphql(mutation, { name: 'createImage' }),
   graphql(query)
-)(Gallery)
+)(Gallery))
