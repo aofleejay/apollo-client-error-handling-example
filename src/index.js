@@ -11,7 +11,6 @@ const networkInterface = createNetworkInterface({
 
 const client = new ApolloClient({
   networkInterface: networkInterface,
-  dataIdFromObject: o => o.id
 })
 
 ReactDOM.render(
